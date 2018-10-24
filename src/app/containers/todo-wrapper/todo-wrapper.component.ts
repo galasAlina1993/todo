@@ -14,11 +14,25 @@ export class TodoWrapperComponent implements OnInit {
   showAll = true;
   showDoneItems = false;
 
-  constructor(todo: TodoService ) {
-    this.todoList = todo.getTasks();
+
+  constructor(private todo: TodoService ) {
+    this.todoList = this.getTasks();
   }
 
-  sortItems (type: sortTypes) {
+  public cancelEditHandler() {
+    this.todoList = this.getTasks();
+  }
+
+  public saveHandler({item, itemIndex}) {
+    this.todo.setItemByIndex(item, itemIndex);
+    this.todoList = this.getTasks();
+  }
+
+  public getTasks() {
+    return this.todo.getTasks();
+  }
+
+  public sortItems (type: sortTypes) {
     switch (type) {
       case TODO_CONST.ALL:
         this.showAll = true;

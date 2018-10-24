@@ -31,6 +31,10 @@ export class TodoService {
     return this.todosList;
   }
 
+  public setItemByIndex(item, index) {
+    this.todosList[index] = item;
+  }
+
   public addTask () {
     this.todosList.push({
       name: 'Пойти на фитнес',
