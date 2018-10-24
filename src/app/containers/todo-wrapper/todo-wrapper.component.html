@@ -1,0 +1,12 @@
+<div class="wrapper">
+    <div class="button-set">
+      <app-ctrls (sortTasks)='sortItems($event)'></app-ctrls>
+    </div>
+    <ul class="todo-list">
+      <div *ngFor="let todoItem of todoList; let i = index">
+        <app-item *ngIf="showAll || todoItem.status === showDoneItems; else FirstTPL" [item]="todoItem" [itemIndex]="i">
+        </app-item>
+      </div>
+      <ng-template #FirstTPL>Not Displayed</ng-template>
+    </ul>
+</div>
