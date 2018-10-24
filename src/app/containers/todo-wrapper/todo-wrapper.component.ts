@@ -16,21 +16,21 @@ export class TodoWrapperComponent implements OnInit {
 
 
   constructor(private todo: TodoService ) {
-    this.todoList = this.getTasks();
+    this.todo.todoSubjObservable().subscribe(data => {
+      this.todoList = data;
+    });
+    this.todo.getTasks();
+
   }
 
   public cancelEditHandler() {
-    this.todoList = this.getTasks();
+    this.todo.getTasks();
   }
 
   public saveHandler({item, itemIndex}) {
     this.todo.setItemByIndex(item, itemIndex);
-    this.todoList = this.getTasks();
   }
 
-  public getTasks() {
-    return this.todo.getTasks();
-  }
 
   public sortItems (type: sortTypes) {
     switch (type) {

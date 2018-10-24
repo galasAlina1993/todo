@@ -1,7 +1,10 @@
 import {Injectable} from '@angular/core';
+import {Subject} from "rxjs";
 
 @Injectable()
 export class TodoService {
+  private todoSubj: Subject<any> = new Subject();
+
   private todosList = [
     {
       name: 'вынести мусор',
@@ -28,11 +31,21 @@ export class TodoService {
   constructor() { }
 
   public getTasks () {
-    return this.todosList;
+    return this.fetchTasks(this.todosList);
+  }
+
+  public fetchTasks (tasks) {
+      this.todoSubj.next(tasks);
+  }
+
+  public todoSubjObservable () {
+    return this.todoSubj.asObservable();
   }
 
   public setItemByIndex(item, index) {
     this.todosList[index] = item;
+    this.getTasks();
+
   }
 
   public addTask () {
