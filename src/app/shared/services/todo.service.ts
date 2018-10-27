@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Subject} from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable()
 export class TodoService {
-  private todoSubj: Subject<any> = new Subject();
+  private todoSubj: BehaviorSubject<any> = new BehaviorSubject(3);
 
   private todosList = [
     {
@@ -30,8 +30,8 @@ export class TodoService {
 
   constructor() { }
 
-  public getTasks () {
-    return this.fetchTasks(this.todosList);
+  public getTasks (param) {
+    return this.fetchTasks(param);
   }
 
   public fetchTasks (tasks) {
@@ -44,7 +44,7 @@ export class TodoService {
 
   public setItemByIndex(item, index) {
     this.todosList[index] = item;
-    this.getTasks();
+    // this.getTasks();
 
   }
 
