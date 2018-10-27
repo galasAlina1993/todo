@@ -11,5 +11,9 @@
       <button *ngIf="editMode" (click)="saveBtnClickHandler(item, itemIndex)">Save</button>
       <button *ngIf="editMode" (click)="cancelBtnClickHandler()">Cancel</button>
     </div>
+    <div class="item actions">
+      <button (click)="copyBtnClickHandler(item)">Copy</button>
+      <button *ngIf="isBuffer" (click)="pasteBtnClickHandler(itemIndex)">Paste</button>
+    </div>
   </div>
 </li>

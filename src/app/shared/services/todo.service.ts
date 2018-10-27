@@ -1,9 +1,11 @@
-import {Injectable} from '@angular/core';
-import { BehaviorSubject } from "rxjs";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable()
 export class TodoService {
   private todoSubj: BehaviorSubject<any> = new BehaviorSubject(3);
+  private bufferSubject: Subject<any> = new Subject<any>();
+  private buffer = [];
 
   private todosList = [
     {
@@ -30,16 +32,40 @@ export class TodoService {
 
   constructor() { }
 
-  public getTasks (param) {
-    return this.fetchTasks(param);
+  public getTasks() {
+    return this.fetchTasks(this.todosList);
   }
 
-  public fetchTasks (tasks) {
-      this.todoSubj.next(tasks);
+  public fetchTasks(params) {
+      this.todoSubj.next(params);
+  }
+
+  public pasteItems(buffer, index) {
+    this.todosList.splice(index, 0, ...buffer);
+    this.clearBuffer();
+    this.getTasks();
   }
 
   public todoSubjObservable () {
     return this.todoSubj.asObservable();
+  }
+
+  public getBufferObservable() {
+    return this.bufferSubject.asObservable();
+  }
+
+  public updateBuffer(item) {
+    this.buffer.push(item);
+    this.getBuffer();
+  }
+
+  public clearBuffer() {
+    this.buffer.length = 0;
+    this.getBuffer();
+  }
+
+  getBuffer() {
+    this.bufferSubject.next(this.buffer);
   }
 
   public setItemByIndex(item, index) {
