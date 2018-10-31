@@ -1,3 +1,16 @@
+$four-columns: 40%;
+$six-columns: 60%;
+$class-slug: col !default;
+
 main {
   border: 3px solid #000;
+  .col {
+    float: left;
+    @for $i from 1 through 10 {
+      &.#{$class-slug}-#{$i} {
+        width: $i *10%;
+      }
+    }
+  }
+
 }

@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './containers/header/header.component';
 import { FormsModule } from '@angular/forms';
-import {NavComponent} from './components/nav/nav.component';
+import { NavComponent } from './components/nav/nav.component';
 import { MainComponent } from './containers/main/main.component';
 import { TodoWrapperComponent } from './containers/todo-wrapper/todo-wrapper.component';
 import { ItemComponent } from './components/item/item.component';
 import { CtrlsComponent } from './components/ctrls/ctrls.component';
 import { TodoService } from './shared/services/todo.service';
+import { AddTaskComponent } from './components/add-task/add-task.component';
+import { TodotimeValidator } from './shared/directives/todotime.validator';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { TodoService } from './shared/services/todo.service';
     MainComponent,
     TodoWrapperComponent,
     ItemComponent,
-    CtrlsComponent
+    CtrlsComponent,
+    TodotimeValidator,
+    AddTaskComponent
   ],
   imports: [ // массив модулей, сторонних, или самописных.
     BrowserModule,

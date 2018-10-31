@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { ITodo } from '../models/todo.model';
 
 @Injectable()
 export class TodoService {
@@ -7,24 +8,28 @@ export class TodoService {
   private bufferSubject: Subject<any> = new Subject<any>();
   private buffer = [];
 
-  private todosList = [
+  private todosList: ITodo[] = [
     {
       name: 'вынести мусор',
+      descr: 'вынести мусор',
       time: '18.10.2018',
       status: false
     },
     {
       name: 'вынести мусор',
+      descr: 'вынести мусор',
       time: '18.10.2018',
       status: true
     },
     {
       name: 'вынести мусор',
+      descr: 'вынести мусор',
       time: '18.10.2018',
       status: false
     },
     {
       name: 'вынести мусор',
+      descr: 'вынести мусор',
       time: '18.10.2018',
       status: true
     }
@@ -74,11 +79,7 @@ export class TodoService {
 
   }
 
-  public addTask () {
-    this.todosList.push({
-      name: 'Пойти на фитнес',
-      time: '18.10.2018',
-      status: false
-    });
+  public addTask (task) {
+    this.todosList.push(task);
   }
 }

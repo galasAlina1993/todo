@@ -1,0 +1,64 @@
+<div class="add-task-container">
+  <h1>Add Task Form <pre>{{model | json }}</pre></h1>
+  <form #taskForm="ngForm" (ngSubmit)="onSubmit(taskForm)">
+    <div class="form-group" [class.has-error]="formErrors.name">
+      <label for="name" class="required">Name</label>
+      <input
+        type="text"
+        [(ngModel)]="model.name"
+        class="form-control"
+        name="name"
+        id="name"
+        required
+        minlength="5"
+        maxlength="150"
+        pattern="^[A-Za-z0-9 ]+$"
+      >
+      <span *ngIf="formErrors.name">
+        {{formErrors.name}}
+      </span>
+    </div>
+
+    <div class="form-group" [class.has-error]="formErrors.descr">
+      <label for="descr" class="required">Description</label>
+      <input
+        type="text"
+        [(ngModel)]="model.descr"
+        class="form-control"
+        name="descr"
+        id="descr"
+        required>
+      <span *ngIf="formErrors.descr">
+        {{formErrors.descr}}
+      </span>
+    </div>
+
+    <div class="form-group" [class.has-error]="formErrors.time">
+      <label for="time" class="required">Task Date</label>
+      <input
+        type="date"
+        [(ngModel)]="model.time"
+        class="form-control"
+        #time="ngModel"
+        min="{{minDate}}"
+        name="time"
+        id="time"
+        app-todo-time
+        required
+      >
+      <span *ngIf="formErrors.time">
+        {{formErrors.time}}
+      </span>
+
+      <pre>{{time.errors | json}}</pre>
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="!taskForm.form.valid"
+      class="btn btn-success">
+      Add New Task
+    </button>
+
+  </form>
+</div>
