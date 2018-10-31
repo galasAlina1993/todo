@@ -2,9 +2,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 export class ItemComponent implements OnInit {
   @Input() item = <any>{};
+  @Input() isBuffer = false;
   @Input() itemIndex = 0;
   @Output() cancelEvt = new EventEmitter();
   @Output() saveEvt = new EventEmitter();
+  @Output() copyEvt = new EventEmitter();
+  @Output() pasteEvt = new EventEmitter();
   public editMode = false;
   constructor() {}
   private editingItem = <any>{};
@@ -29,7 +32,13 @@ export class ItemComponent implements OnInit {
     this.cancelEvt.emit();
   }
 
+  public copyBtnClickHandler(item) {
+    this.copyEvt.emit(item);
+  }
 
+  public pasteBtnClickHandler(index) {
+    this.pasteEvt.emit(index);
+  }
 
 }
 

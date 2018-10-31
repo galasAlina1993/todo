@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { TodoService } from '../../shared/services/todo.service';
 import { TODO_CONST } from '../../shared/constants/todo-constants';
 
-type sortTypes = 'all'| 'done' | 'not done';
+type sortTypes = 'all' | 'done' | 'not done';
 
 @Component({
   selector: 'app-todo-wrapper',
@@ -13,26 +13,48 @@ export class TodoWrapperComponent implements OnInit {
   todoList: Array<any>;
   showAll = true;
   showDoneItems = false;
+  buffer = [];
+  isBuffer = false;
+
+  keyEvent(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.todo.clearBuffer();
+    }
+  }
 
 
-  constructor(private todo: TodoService ) {
-    this.todoList = this.getTasks();
+  constructor(private todo: TodoService) {
+    const subscription = this.todo.todoSubjObservable().subscribe(data => {
+      this.todoList = data;
+    });
+
+    const bufferSubscription = this.todo.getBufferObservable().subscribe(data => this.buffer = data);
   }
 
   public cancelEditHandler() {
-    this.todoList = this.getTasks();
+    this.todo.getTasks();
   }
 
   public saveHandler({item, itemIndex}) {
     this.todo.setItemByIndex(item, itemIndex);
-    this.todoList = this.getTasks();
   }
 
-  public getTasks() {
-    return this.todo.getTasks();
+  public onCopied(item) {
+    this.todo.updateBuffer(item);
   }
 
-  public sortItems (type: sortTypes) {
+  public onPaste(index) {
+    this.todo.pasteItems(this.buffer, index);
+  }
+
+
+  public getIsBuffer() {
+    return this.isBuffer = !!this.buffer.length;
+  }
+
+
+
+  public sortItems(type: sortTypes) {
     switch (type) {
       case TODO_CONST.ALL:
         this.showAll = true;
@@ -49,6 +71,7 @@ export class TodoWrapperComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.todo.getTasks();
   }
 
 }

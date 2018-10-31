@@ -1,3 +1,10 @@
 ul,ol {
   list-style-type: none;
 }
+
+.clearfix::before {
+  content: '';
+  display: table;
+  clear: both;
+  overflow: hidden;
+}

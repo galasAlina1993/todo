@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" (window:keyup)="keyEvent($event)">
     <div class="button-set">
       <app-ctrls (sortTasks)='sortItems($event)'></app-ctrls>
     </div>
@@ -7,11 +7,15 @@
         <app-item
           *ngIf="showAll || todoItem.status === showDoneItems; else FirstTPL"
           [item]="todoItem" [itemIndex]="i"
+          [isBuffer]="getIsBuffer()"
           (cancelEvt)="cancelEditHandler()"
           (saveEvt)="saveHandler($event)"
+          (copyEvt)="onCopied($event)"
+          (pasteEvt)="onPaste($event)"
         >
         </app-item>
       </div>
       <ng-template #FirstTPL>Not Displayed</ng-template>
     </ul>
+    <div class="total" *ngIf="getIsBuffer()">Total Copied: {{buffer.length}}</div>
 </div>
