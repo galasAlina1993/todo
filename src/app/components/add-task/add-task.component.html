@@ -1,5 +1,5 @@
-<div class="add-task-container">
-  <h1>Add Task Form <pre>{{model | json }}</pre></h1>
+<div class="add-task-container form-container">
+  <h1>Add Task Form</h1>
   <form #taskForm="ngForm" (ngSubmit)="onSubmit(taskForm)">
     <div class="form-group" [class.has-error]="formErrors.name">
       <label for="name" class="required">Name</label>

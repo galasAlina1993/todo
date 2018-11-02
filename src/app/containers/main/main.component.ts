@@ -7,6 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
+  public isRegister = false;
+
+  submitEvtHandler($event) {
+    this.isRegister = $event;
+  }
+
   constructor() { }
 
   ngOnInit() {
