@@ -14,6 +14,7 @@ import { TodoService } from './shared/services/todo.service';
 import { AddTaskComponent } from './components/add-task/add-task.component';
 import { TodotimeValidator } from './shared/directives/todotime.validator';
 import { RegisterComponent } from './containers/register/register.component';
+import { AuthGuardService } from './shared/guards/auth-guard.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { RegisterComponent } from './containers/register/register.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [TodoService], // сервисы - функции помошники. Они делают крупные манипуляции с данными.
+  providers: [TodoService, AuthGuardService], // сервисы - функции помошники. Они делают крупные манипуляции с данными.
   bootstrap: [AppComponent] // определяет компонент, с которого начинается запуск и отрисовка приложения
 })
 export class AppModule { }

@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -8,16 +9,16 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 })
 export class RegisterComponent implements OnInit {
   public registerForm: FormGroup;
-  @Output() public submitEvt: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private router: Router) {}
 
   ngOnInit() {
     this.registerForm = this.fb.group(this.createFromGroup().controls, {validator: this.passwordConfirming});
   }
 
-  submitHandler($event) {
-    this.submitEvt.emit(true);
+  submitHandler() {
+    localStorage.setItem('isRegistered', 'true');
+    this.router.navigate(['']);
   }
 
   get username() {
