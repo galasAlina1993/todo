@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ITodo } from '../../shared/models/todo.model';
 import { TodoService } from '../../shared/services/todo.service';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-task',
@@ -32,7 +33,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit {
   };
 
   public minDate = this.getParsedDate(new Date());
-  public model: ITodo = {
+  public model = {
     name: '',
     descr: '',
     time: this.minDate,
@@ -42,7 +43,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit {
   @ViewChild('taskForm') taskForm: NgForm;
 
 
-  constructor(private todoService: TodoService) {}
+  constructor(private todoService: TodoService, private router: Router) {}
 
   ngOnInit() {}
   ngAfterViewInit() {
@@ -54,6 +55,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit {
     const task = {...this.model};
     this.todoService.addTask(task);
     form.resetForm();
+    this.router.navigate(['']);
 
   }
 

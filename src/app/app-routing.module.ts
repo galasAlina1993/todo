@@ -1,18 +1,41 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './containers/main/main.component';
-import { RegisterComponent } from './containers/register/register.component';
 import { AuthGuardService } from './shared/guards/auth-guard.service';
+import { TodoInfoComponent } from './containers/todo-info/todo-info.component';
+import { AddTaskComponent } from './containers/add-task/add-task.component';
+import { TodoResolverService } from './shared/resolvers/todo-resolver.service';
+
 
 const routes: Routes = [
   {
     path: '',
-    component: MainComponent,
-    canActivate: [AuthGuardService]
+    redirectTo: 'todos',
+    pathMatch: 'full'
+  },
+  {
+    path: 'todos',
+    canActivate: [AuthGuardService],
+    children: [
+      {
+        path: '',
+        component: MainComponent,
+      },
+      {
+        path: 'create',
+        component: AddTaskComponent
+      },
+      {
+        path: ':id',
+        component: TodoInfoComponent,
+        data: {title: 'Edit'},
+        resolve: [TodoResolverService]
+      }
+    ]
   },
   {
     path: 'register',
-    component: RegisterComponent
+    loadChildren: './containers/register/module#RegisterModule'
   },
   { path: '**', redirectTo: '' }
 ];
