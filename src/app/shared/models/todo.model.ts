@@ -1,4 +1,5 @@
 export interface ITodo {
+  id: number;
   name: string;
   descr: string;
   time: string;

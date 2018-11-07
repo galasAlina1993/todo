@@ -2,6 +2,7 @@
     <div class="button-set">
       <app-ctrls (sortTasks)='sortItems($event)'></app-ctrls>
     </div>
+    <a [routerLink]="['create']">Create new task</a>
     <ul class="todo-list">
       <div *ngFor="let todoItem of todoList; let i = index">
         <app-item

@@ -32,7 +32,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit {
   };
 
   public minDate = this.getParsedDate(new Date());
-  public model: ITodo = {
+  public model = {
     name: '',
     descr: '',
     time: this.minDate,

@@ -15,6 +15,8 @@ import { AddTaskComponent } from './components/add-task/add-task.component';
 import { TodotimeValidator } from './shared/directives/todotime.validator';
 import { RegisterComponent } from './containers/register/register.component';
 import { AuthGuardService } from './shared/guards/auth-guard.service';
+import { TodoInfoComponent } from './containers/todo-info/todo-info.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -27,13 +29,15 @@ import { AuthGuardService } from './shared/guards/auth-guard.service';
     CtrlsComponent,
     TodotimeValidator,
     RegisterComponent,
+    TodoInfoComponent,
     AddTaskComponent
   ],
   imports: [ // массив модулей, сторонних, или самописных.
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [TodoService, AuthGuardService], // сервисы - функции помошники. Они делают крупные манипуляции с данными.
   bootstrap: [AppComponent] // определяет компонент, с которого начинается запуск и отрисовка приложения

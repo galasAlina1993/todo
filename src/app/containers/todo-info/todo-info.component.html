@@ -1,0 +1,5 @@
+<a [routerLink]="['/']">Go to task list</a>
+<p *ngFor="let field of task | keyvalue">
+  <b style="text-transform: capitalize">{{field.key}}:</b> {{field.value}}
+</p>
+
