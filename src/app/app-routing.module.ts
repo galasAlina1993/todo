@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './containers/main/main.component';
-import { RegisterComponent } from './containers/register/register.component';
 import { AuthGuardService } from './shared/guards/auth-guard.service';
 import { TodoInfoComponent } from './containers/todo-info/todo-info.component';
-import { AddTaskComponent } from './components/add-task/add-task.component';
+import { AddTaskComponent } from './containers/add-task/add-task.component';
+import { TodoResolverService } from './shared/resolvers/todo-resolver.service';
 
 
 const routes: Routes = [
@@ -27,13 +27,15 @@ const routes: Routes = [
       },
       {
         path: ':id',
-        component: TodoInfoComponent
+        component: TodoInfoComponent,
+        data: {title: 'Edit'},
+        resolve: [TodoResolverService]
       }
     ]
   },
   {
     path: 'register',
-    component: RegisterComponent
+    loadChildren: './containers/register/module#RegisterModule'
   },
   { path: '**', redirectTo: '' }
 ];
