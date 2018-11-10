@@ -4,7 +4,7 @@
     </div>
     <a [routerLink]="['create']">Create new task</a>
     <ul class="todo-list">
-      <div *ngFor="let todoItem of todoList; let i = index">
+      <div *ngFor="let todoItem of todoList$ | async; let i = index; trackBy: trackByFn">
         <app-item
           *ngIf="showAll || todoItem.status === showDoneItems; else FirstTPL"
           [item]="todoItem" [itemIndex]="i"
@@ -13,6 +13,7 @@
           (saveEvt)="saveHandler($event)"
           (copyEvt)="onCopied($event)"
           (pasteEvt)="onPaste($event)"
+          (deleteEvt)="onDelete($event)"
         >
         </app-item>
       </div>

@@ -8,6 +8,7 @@ export class ItemComponent implements OnInit {
   @Output() saveEvt = new EventEmitter();
   @Output() copyEvt = new EventEmitter();
   @Output() pasteEvt = new EventEmitter();
+  @Output() deleteEvt = new EventEmitter();
   public editMode = false;
   constructor() {}
   private editingItem = <any>{};
@@ -22,8 +23,8 @@ export class ItemComponent implements OnInit {
     this.editingItem = {...this.item, name: event.target.value};
   }
 
-  public saveBtnClickHandler(item, itemIndex) {
-    this.saveEvt.emit({item: this.editingItem.name ? this.editingItem : this.item, itemIndex});
+  public saveBtnClickHandler(item) {
+    this.saveEvt.emit({item: this.editingItem.name ? this.editingItem : this.item});
     this.editMode = false;
   }
 
@@ -34,6 +35,10 @@ export class ItemComponent implements OnInit {
 
   public copyBtnClickHandler(item) {
     this.copyEvt.emit(item);
+  }
+
+  public deleteBtnClickHandler(item) {
+    this.deleteEvt.emit(item.id);
   }
 
   public pasteBtnClickHandler(index) {

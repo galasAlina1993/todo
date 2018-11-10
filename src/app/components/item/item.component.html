@@ -9,6 +9,7 @@
     <div class="item actions">
       <button (click)="editBtnClickHandler()" *ngIf="!editMode">Edit</button>
       <button [routerLink]="[item.id]">Info</button>
+      <button (click)="deleteBtnClickHandler(item)">Delete</button>
       <button *ngIf="editMode" (click)="saveBtnClickHandler(item, itemIndex)">Save</button>
       <button *ngIf="editMode" (click)="cancelBtnClickHandler()">Cancel</button>
     </div>

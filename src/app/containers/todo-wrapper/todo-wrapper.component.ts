@@ -1,6 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { TodoService } from '../../shared/services/todo.service';
 import { TODO_CONST } from '../../shared/constants/todo-constants';
+import { Observable, Subscription } from 'rxjs';
+import { ITodo } from '../../shared/models/todo.model';
+import { flatMap, map } from 'rxjs/operators';
 
 type sortTypes = 'all' | 'done' | 'not done';
 
@@ -10,48 +13,51 @@ type sortTypes = 'all' | 'done' | 'not done';
   styleUrls: ['./todo-wrapper.component.scss']
 })
 export class TodoWrapperComponent implements OnInit {
-  todoList: Array<any>;
+  todoList$: Observable<ITodo[]>;
   showAll = true;
   showDoneItems = false;
   buffer = [];
   isBuffer = false;
 
-  keyEvent(event: KeyboardEvent) {
+
+  public keyEvent(event: KeyboardEvent) {
     if (event.key === 'Escape') {
       this.todo.clearBuffer();
     }
   }
 
-
   constructor(private todo: TodoService) {
-    const subscription = this.todo.todoSubjObservable().subscribe(data => {
-      this.todoList = data;
-    });
-
-    const bufferSubscription = this.todo.getBufferObservable().subscribe(data => this.buffer = data);
+    this.todo.getBufferObservable().subscribe(data => this.buffer = data);
   }
 
   public cancelEditHandler() {
-    this.todo.getTasks();
+    this.todoList$ = this.getTaskList();
   }
 
-  public saveHandler({item, itemIndex}) {
-    this.todo.setItemByIndex(item, itemIndex);
+  public saveHandler({item}) {
+    this.todoList$ = this.todo.updateItem(item).pipe(flatMap(() => this.getTaskList()));
   }
 
   public onCopied(item) {
     this.todo.updateBuffer(item);
   }
 
+  public onDelete(id) {
+    this.todoList$ = this.todo.deleteItem(id).pipe(flatMap(() => this.getTaskList()));
+  }
+
   public onPaste(index) {
-    this.todo.pasteItems(this.buffer, index);
+    this.todoList$ = this.todoList$.pipe(map(res => {
+      res.splice(index, 0, ...this.buffer);
+      this.todo.clearBuffer();
+      return res;
+    }));
   }
 
 
   public getIsBuffer() {
     return this.isBuffer = !!this.buffer.length;
   }
-
 
 
   public sortItems(type: sortTypes) {
@@ -71,7 +77,17 @@ export class TodoWrapperComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.todo.getTasks();
+    this.todoList$ = this.getTaskList();
   }
+
+  getTaskList() {
+    return this.todo.getTasks();
+  }
+
+
+  trackByFn(index, item) {
+    return index;
+  }
+
 
 }
