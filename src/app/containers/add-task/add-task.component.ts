@@ -1,15 +1,18 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ITodo } from '../../shared/models/todo.model';
 import { TodoService } from '../../shared/services/todo.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-task',
   templateUrl: './add-task.component.html',
   styleUrls: ['./add-task.component.scss']
 })
-export class AddTaskComponent implements OnInit, AfterViewInit {
+export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  private addTaskSub: Subscription;
 
 
   static errorMessages = {
@@ -53,10 +56,10 @@ export class AddTaskComponent implements OnInit, AfterViewInit {
 
   public onSubmit(form: NgForm) {
     const task = {...this.model};
-    this.todoService.addTask(task);
-    form.resetForm();
-    this.router.navigate(['']);
-
+    this.addTaskSub = this.todoService.addTask(task).subscribe(() => {
+      form.resetForm();
+      this.router.navigate(['']);
+    });
   }
 
   public onValueChanged() {
@@ -73,6 +76,12 @@ export class AddTaskComponent implements OnInit, AfterViewInit {
           this.formErrors[field] = messages[key];
         }
       }
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.addTaskSub) {
+      this.addTaskSub.unsubscribe();
     }
   }
 

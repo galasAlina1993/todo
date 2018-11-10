@@ -1,69 +1,29 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { ITodo } from '../models/todo.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class TodoService {
-  private todoSubj: BehaviorSubject<any> = new BehaviorSubject(3);
   private bufferSubject: Subject<any> = new Subject<any>();
   private buffer = [];
   private url = `http://localhost:3000`;
 
-  private todosList: ITodo[] = [
-    {
-      id: 1,
-      name: 'вынести мусор',
-      descr: 'вынести мусор',
-      time: '18.10.2018',
-      status: false
-    },
-    {
-      id: 2,
-      name: 'вынести мусор',
-      descr: 'вынести мусор',
-      time: '18.10.2018',
-      status: true
-    },
-    {
-      id: 3,
-      name: 'вынести мусор',
-      descr: 'вынести мусор',
-      time: '18.10.2018',
-      status: false
-    },
-    {
-      id: 4,
-      name: 'вынести мусор',
-      descr: 'вынести мусор',
-      time: '18.10.2018',
-      status: true
-    }
-  ];
-
   constructor(private http: HttpClient) {}
 
-  public getTasks() {
-    // return this.http.get(`${this.url}/todos`);
-    return this.fetchTasks(this.todosList);
+  public getTasks(): Observable<ITodo[]> {
+    return this.http.get<ITodo[]>(`${this.url}/todos`);
   }
 
-  public getTaskById(id): ITodo {
-    return this.todosList.find(e => e.id === +id) || <ITodo>{};
+  public getTaskById(id): Observable<ITodo> {
+    const httpParams: HttpParams = new HttpParams();
+    const params = httpParams.set('id', id);
+    return this.http.get<ITodo>(`${this.url}/todos`, { params });
   }
 
-  public fetchTasks(params) {
-      this.todoSubj.next(params);
-  }
-
-  public pasteItems(buffer, index) {
-    this.todosList.splice(index, 0, ...buffer);
+  public pasteItems(buffer) {
+    // this.todosList.splice(index, 0, ...buffer);
     this.clearBuffer();
-    this.getTasks();
-  }
-
-  public todoSubjObservable () {
-    return this.todoSubj.asObservable();
   }
 
   public getBufferObservable() {
@@ -84,13 +44,15 @@ export class TodoService {
     this.bufferSubject.next(this.buffer);
   }
 
-  public setItemByIndex(item, index) {
-    this.todosList[index] = item;
-    // this.getTasks();
-
+  public updateItem(item) {
+    return this.http.put(`${this.url}/todos/${item.id}`, item);
   }
 
   public addTask (task) {
-    this.todosList.push({id: this.todosList.length, ...task});
+    return this.http.post(`${this.url}/todos`, task);
+  }
+
+  public deleteItem(id) {
+    return this.http.delete(`${this.url}/todos/${id}`);
   }
 }
