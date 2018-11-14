@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './containers/header/header.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { NavComponent } from './components/nav/nav.component';
 import { MainComponent } from './containers/main/main.component';
 import { TodoWrapperComponent } from './containers/todo-wrapper/todo-wrapper.component';
@@ -13,11 +13,17 @@ import { CtrlsComponent } from './components/ctrls/ctrls.component';
 import { TodoService } from './shared/services/todo.service';
 import { AddTaskComponent } from './containers/add-task/add-task.component';
 import { TodotimeValidator } from './shared/directives/todotime.validator';
-import { RegisterComponent } from './containers/register/register.component';
 import { AuthGuardService } from './shared/guards/auth-guard.service';
 import { TodoInfoComponent } from './containers/todo-info/todo-info.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TodoResolverService } from './shared/resolvers/todo-resolver.service';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { metaReducers, reducers } from './core/store/index';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { TodosEffects } from './core/store/effects/todos.effects';
 
 @NgModule({
   declarations: [
@@ -35,6 +41,10 @@ import { TodoResolverService } from './shared/resolvers/todo-resolver.service';
   imports: [ // массив модулей, сторонних, или самописных.
     BrowserModule,
     AppRoutingModule,
+    StoreModule.forRoot(reducers, { metaReducers }),
+    StoreRouterConnectingModule.forRoot(),
+    StoreDevtoolsModule.instrument({name: 'NgRx Demo', logOnly: environment.production}),
+    EffectsModule.forRoot([TodosEffects]),
     FormsModule,
     HttpClientModule
   ],
