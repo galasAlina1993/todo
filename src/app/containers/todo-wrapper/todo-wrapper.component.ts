@@ -4,6 +4,9 @@ import { TODO_CONST } from '../../shared/constants/todo-constants';
 import { Observable, Subscription } from 'rxjs';
 import { ITodo } from '../../shared/models/todo.model';
 import { flatMap, map } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import * as TodosActions from '../../core/store/actions/todos.actions';
+import { State, getTodos } from '../../core/store';
 
 type sortTypes = 'all' | 'done' | 'not done';
 
@@ -26,8 +29,9 @@ export class TodoWrapperComponent implements OnInit {
     }
   }
 
-  constructor(private todo: TodoService) {
+  constructor(private todo: TodoService, private store: Store<State>) {
     this.todo.getBufferObservable().subscribe(data => this.buffer = data);
+    this.todoList$ = this.store.pipe(select(getTodos));
   }
 
   public cancelEditHandler() {
@@ -77,7 +81,8 @@ export class TodoWrapperComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.todoList$ = this.getTaskList();
+    // this.todoList$ = this.getTaskList();
+    this.store.dispatch({ type: TodosActions.TodosActionTypes.GET_TODOS });
   }
 
   getTaskList() {
