@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import {select, Store} from "@ngrx/store";
+import {getIsRegister, State} from "./store";
+import { Subscription} from "rxjs";
+import {GetRegister} from "./store/register.actions";
+
 
 @Component({
   selector: 'app-register',
@@ -8,17 +13,26 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
+  private isRegisteredSubscription: Subscription;
   public registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(private fb: FormBuilder, private router: Router, private store: Store<State>) {
+    this.isRegisteredSubscription = this.store.pipe(select(getIsRegister)).subscribe(isRegister => {
+      if (isRegister) {
+        localStorage.setItem('isRegistered', 'true');
+        this.router.navigate(['']);
+      }
+    })
+  }
 
   ngOnInit() {
     this.registerForm = this.fb.group(this.createFromGroup().controls, {validator: this.passwordConfirming});
   }
 
   submitHandler() {
-    localStorage.setItem('isRegistered', 'true');
-    this.router.navigate(['']);
+    this.store.dispatch(new GetRegister())
+    // localStorage.setItem('isRegistered', 'true');
+    // this.router.navigate(['']);
   }
 
   get username() {
@@ -52,6 +66,5 @@ export class RegisterComponent implements OnInit {
       return {invalid: true, matching: 'Passwords are not matching'};
     }
   }
-
 }
 

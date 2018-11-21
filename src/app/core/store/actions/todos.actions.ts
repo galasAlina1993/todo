@@ -18,7 +18,6 @@ export class GetTodosSuccess implements Action {
 
 export class GetTodosFail implements Action {
   readonly type = TodosActionTypes.GET_TODOS_FAIL;
-  constructor() {}
 }
 
 export type TodosActionsUnion = GetTodos | GetTodosSuccess | GetTodosFail;

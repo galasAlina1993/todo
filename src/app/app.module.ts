@@ -17,13 +17,7 @@ import { AuthGuardService } from './shared/guards/auth-guard.service';
 import { TodoInfoComponent } from './containers/todo-info/todo-info.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TodoResolverService } from './shared/resolvers/todo-resolver.service';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { metaReducers, reducers } from './core/store/index';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { TodosEffects } from './core/store/effects/todos.effects';
+import { AppStoreModule } from './core/store/store.module';
 
 @NgModule({
   declarations: [
@@ -41,10 +35,7 @@ import { TodosEffects } from './core/store/effects/todos.effects';
   imports: [ // массив модулей, сторонних, или самописных.
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot(reducers, { metaReducers }),
-    StoreRouterConnectingModule.forRoot(),
-    StoreDevtoolsModule.instrument({name: 'NgRx Demo', logOnly: environment.production}),
-    EffectsModule.forRoot([TodosEffects]),
+    AppStoreModule,
     FormsModule,
     HttpClientModule
   ],
